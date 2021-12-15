@@ -1,2 +1,3 @@
-import helloWorld from "./foo"
-helloWorld()
+export default function (){
+
+}
