@@ -1,6 +1,5 @@
 <!-- DO NOT REMOVE - contributor_list:data:start:["Borrus-sudo"]:end -->
-# ⚖ proxy-hooks
-
+# 🔑 proxy-hooks
 [![All Contributors](https://img.shields.io/github/contributors/Borrus-sudo/proxy-hooks?color=orange)](#contributors-)
 ![License](https://img.shields.io/github/license/Borrus-sudo/proxy-hooks?label=License)
 ![Last Commit](https://img.shields.io/github/last-commit/Borrus-sudo/proxy-hooks?label=Last%20Commit)
