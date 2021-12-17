@@ -9,7 +9,7 @@ type Descriptor = {
 };
 type CachedKnowledge = {
   [n: string | symbol]: {
-    name: string | symbol;
+    propName: string | symbol;
     calls: number;
     results: any[];
   };
@@ -21,11 +21,19 @@ type Handler<T extends Object> = Partial<
     tapGet: TapSignature<T>;
     tapSet: TapSignature<T>;
     methodArguments: (
-      cachedKnowledge: { name: string | symbol; calls: number; results: any[] },
+      cachedKnowledge: {
+        propName: string | symbol;
+        calls: number;
+        results: any[];
+      },
       args: any[],
     ) => void;
     methodReturn: (
-      cachedKnowledge: { name: string | symbol; calls: number; results: any[] },
+      cachedKnowledge: {
+        propName: string | symbol;
+        calls: number;
+        results: any[];
+      },
       result: any,
     ) => any | void;
   } & Omit<ProxyHandler<T>, "get" | "set" | "apply">

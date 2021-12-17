@@ -7,7 +7,7 @@ export default function <T extends Object>(
   if (typeof target !== "function") {
     const cachedKnowledge: CachedKnowledge = {};
     Object.entries(target).forEach(([prop, value]) => {
-      cachedKnowledge[prop] = { name: prop, calls: 0, results: [] };
+      cachedKnowledge[prop] = { propName: prop, calls: 0, results: [] };
       if (typeof value === "function") {
         target[prop] = function (...args: any[]) {
           if (handler.methodArguments) {
@@ -30,9 +30,9 @@ export default function <T extends Object>(
       }
     });
   }
-  let knowledge: { name: ""; calls: number; results: any[] } = {
+  let knowledge: { propName: ""; calls: number; results: any[] } = {
     //@ts-ignore
-    name: target.name,
+    propName: target.name,
     calls: 0,
     results: [],
   };
