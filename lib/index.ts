@@ -5,32 +5,29 @@ export default function <T extends Object>(
   handler: Readonly<Handler<T>>,
 ) {
   if (typeof target !== "function") {
-    const cachedKnowledge: CachedKnowledge = {};
+    const cachedInfo: CachedKnowledge = {};
     Object.entries(target).forEach(([prop, value]) => {
-      cachedKnowledge[prop] = { propName: prop, calls: 0, results: [] };
+      cachedInfo[prop] = { propName: prop, calls: 0, results: [] };
       if (typeof value === "function") {
         target[prop] = function (...args: any[]) {
           if (handler.methodArguments) {
-            handler.methodArguments(cachedKnowledge[prop], args);
+            handler.methodArguments(cachedInfo[prop], args);
           }
           let returnValue = value.apply(target, args);
           if (handler.methodReturn) {
-            const changed = handler.methodReturn(
-              cachedKnowledge[prop],
-              returnValue,
-            );
+            const changed = handler.methodReturn(cachedInfo[prop], returnValue);
             if (typeof changed !== "undefined") {
               returnValue = changed;
             }
           }
-          cachedKnowledge[prop].calls += 1;
-          cachedKnowledge[prop].results.push(returnValue);
+          cachedInfo[prop].calls += 1;
+          cachedInfo[prop].results.push(returnValue);
           return returnValue;
         };
       }
     });
   }
-  let knowledge: { propName: ""; calls: number; results: any[] } = {
+  let cachedInfo: { propName: ""; calls: number; results: any[] } = {
     //@ts-ignore
     propName: target.name,
     calls: 0,
@@ -87,16 +84,16 @@ export default function <T extends Object>(
     },
     apply(target, thisArg, args) {
       if (handler.methodArguments) {
-        handler.methodArguments(knowledge, args);
+        handler.methodArguments(cachedInfo, args);
       }
       //@ts-ignore
       let returnValue = target.apply(thisArg, args);
-      const changed = handler.methodReturn(knowledge, returnValue);
+      const changed = handler.methodReturn(cachedInfo, returnValue);
       if (typeof changed !== "undefined") {
         returnValue = changed;
       }
-      knowledge.calls += 1;
-      knowledge.results.push(returnValue);
+      cachedInfo.calls += 1;
+      cachedInfo.results.push(returnValue);
       return returnValue;
     },
     ...handler,
