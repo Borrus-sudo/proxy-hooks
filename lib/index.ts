@@ -1,9 +1,35 @@
-import type { Descriptor, Handler } from "./types";
+import type { CachedKnowledge, Descriptor, Handler } from "./types";
 
-export default function <T extends Object>(
+export default function <T extends Object | Function>(
   targetObject: T,
-  handler: Handler<T>,
+  handler: Readonly<Handler<T>>,
 ) {
+  if (typeof targetObject !== "function") {
+    const cachedKnowledge: CachedKnowledge = {};
+    Object.entries(targetObject).forEach(([prop, value]) => {
+      if (typeof value === "function") {
+        value.bind(targetObject);
+        targetObject[prop] = function (...args) {
+          if (handler.methodArguments) {
+            handler.methodArguments(cachedKnowledge[prop], ...args);
+          }
+          let returnValue = value(...args);
+          if (handler.methodReturn) {
+            const changed = handler.methodReturn(
+              cachedKnowledge[prop],
+              returnValue,
+            );
+            if (typeof changed !== "undefined") {
+              returnValue = changed;
+            }
+          }
+          cachedKnowledge[prop].calls += 1;
+          cachedKnowledge[prop].results.push(returnValue);
+          return returnValue;
+        };
+      }
+    });
+  }
   return new Proxy(targetObject, {
     get(target: T, prop: string | symbol, receiver) {
       const descriptor: Descriptor = {
@@ -51,13 +77,12 @@ export default function <T extends Object>(
         if (handler.tapSet) {
           handler.tapSet(target, prop, value);
           return true;
-        } else {
-          target[prop] = value;
-          return true;
         }
       }
+      target[prop] = value;
       return true;
     },
+    apply() {},
     ...handler,
   });
 }
