@@ -9,9 +9,9 @@ export default function <T extends Object | Function>(
     Object.entries(targetObject).forEach(([prop, value]) => {
       if (typeof value === "function") {
         value.bind(targetObject);
-        targetObject[prop] = function (...args) {
+        targetObject[prop] = function (...args: any[]) {
           if (handler.methodArguments) {
-            handler.methodArguments(cachedKnowledge[prop], ...args);
+            handler.methodArguments(cachedKnowledge[prop], args);
           }
           let returnValue = value(...args);
           if (handler.methodReturn) {

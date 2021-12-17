@@ -17,7 +17,7 @@ type Handler<T extends Object> = Partial<
     tapSet: TapSignature<T>;
     methodArguments: (
       cachedKnowledge: { calls: number; results: any[] },
-      ...args: any[]
+      args: any[],
     ) => void;
     methodReturn: (
       cachedKnowledge: { calls: number; results: any[] },
