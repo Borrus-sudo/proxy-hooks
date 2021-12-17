@@ -1,19 +1,19 @@
 import type { CachedKnowledge, Descriptor, Handler } from "./types";
 
-export default function <T extends Object | Function>(
-  targetObject: T,
+export default function <T extends Object>(
+  target: T,
   handler: Readonly<Handler<T>>,
 ) {
-  if (typeof targetObject !== "function") {
+  if (typeof target !== "function") {
     const cachedKnowledge: CachedKnowledge = {};
-    Object.entries(targetObject).forEach(([prop, value]) => {
+    Object.entries(target).forEach(([prop, value]) => {
+      cachedKnowledge[prop] = { name: prop, calls: 0, results: [] };
       if (typeof value === "function") {
-        value.bind(targetObject);
-        targetObject[prop] = function (...args: any[]) {
+        target[prop] = function (...args: any[]) {
           if (handler.methodArguments) {
             handler.methodArguments(cachedKnowledge[prop], args);
           }
-          let returnValue = value(...args);
+          let returnValue = value.apply(target, args);
           if (handler.methodReturn) {
             const changed = handler.methodReturn(
               cachedKnowledge[prop],
@@ -30,9 +30,16 @@ export default function <T extends Object | Function>(
       }
     });
   }
-  return new Proxy(targetObject, {
+  let knowledge: { name: ""; calls: number; results: any[] } = {
+    //@ts-ignore
+    name: target.name,
+    calls: 0,
+    results: [],
+  };
+  return new Proxy(target, {
     get(target: T, prop: string | symbol, receiver) {
       const descriptor: Descriptor = {
+        name: prop,
         type: "",
       };
       if (typeof target[prop] === "function") {
@@ -51,17 +58,13 @@ export default function <T extends Object | Function>(
         }
       }
       if (handler.tapGet) {
-        const returnVal = handler.tapGet(target, prop, receiver);
-        if (returnVal === "") {
-          return Reflect.get(target, prop, receiver);
-        } else {
-          returnVal;
-        }
+        return handler.tapGet(target, prop, receiver);
       }
       return Reflect.get(target, prop, receiver);
     },
     set(target: T, prop: string | symbol, value) {
       const descriptor: Descriptor = {
+        name: prop,
         type: "",
       };
       if (typeof target[prop] === "function") {
@@ -70,7 +73,7 @@ export default function <T extends Object | Function>(
         descriptor.type = "property";
       }
       if (handler.canSet) {
-        const result = handler.canSet(target[prop], value, descriptor);
+        const result = handler.canSet(descriptor, target[prop], value);
         if (!result) {
           return false;
         }
@@ -82,7 +85,20 @@ export default function <T extends Object | Function>(
       target[prop] = value;
       return true;
     },
-    apply() {},
+    apply(target, thisArg, args) {
+      if (handler.methodArguments) {
+        handler.methodArguments(knowledge, args);
+      }
+      //@ts-ignore
+      let returnValue = target.apply(thisArg, args);
+      const changed = handler.methodReturn(knowledge, returnValue);
+      if (typeof changed !== "undefined") {
+        returnValue = changed;
+      }
+      knowledge.calls += 1;
+      knowledge.results.push(returnValue);
+      return returnValue;
+    },
     ...handler,
   });
 }

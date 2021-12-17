@@ -4,23 +4,28 @@ type TapSignature<T extends Object> = (
   receiver: any,
 ) => any;
 type Descriptor = {
+  name: string | symbol;
   type: string;
 };
 type CachedKnowledge = {
-  [n: string | symbol]: { calls: number; results: any[] };
+  [n: string | symbol]: {
+    name: string | symbol;
+    calls: number;
+    results: any[];
+  };
 };
 type Handler<T extends Object> = Partial<
   {
     canGet: (descriptor: Descriptor) => boolean;
-    canSet: (oldValue: any, newValue: any, descriptor: Descriptor) => boolean;
+    canSet: (descriptor: Descriptor, oldValue: any, newValue: any) => boolean;
     tapGet: TapSignature<T>;
     tapSet: TapSignature<T>;
     methodArguments: (
-      cachedKnowledge: { calls: number; results: any[] },
+      cachedKnowledge: { name: string | symbol; calls: number; results: any[] },
       args: any[],
     ) => void;
     methodReturn: (
-      cachedKnowledge: { calls: number; results: any[] },
+      cachedKnowledge: { name: string | symbol; calls: number; results: any[] },
       result: any,
     ) => any | void;
   } & Omit<ProxyHandler<T>, "get" | "set" | "apply">
