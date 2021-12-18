@@ -2,7 +2,7 @@ import Spy from "../lib";
 describe("it should pass the tests", () => {
   it("should work properly", () => {
     expect(2).toEqual(2);
-    const obj = Spy(
+    const [obj, revoke] = Spy(
       {
         name: "Joe",
         printName(name) {

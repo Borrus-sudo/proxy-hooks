@@ -3,7 +3,7 @@ import type { CachedKnowledge, Descriptor, Handler } from "./types";
 export default function <T extends Object>(
   target: T,
   handler: Readonly<Handler<T>>,
-) {
+): [T, { proxy: T; revoke: () => void }] {
   if (typeof target !== "function") {
     const cachedInfo: CachedKnowledge = {};
     Object.entries(target).forEach(([prop, value]) => {
@@ -33,7 +33,7 @@ export default function <T extends Object>(
     calls: 0,
     results: [],
   };
-  return new Proxy(target, {
+  const revocable = Proxy.revocable(target, {
     get(target: T, prop: string | symbol, receiver) {
       const descriptor: Descriptor = {
         name: prop,
@@ -98,4 +98,5 @@ export default function <T extends Object>(
     },
     ...handler,
   });
+  return [revocable.proxy, revocable];
 }
