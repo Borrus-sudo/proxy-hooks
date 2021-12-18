@@ -10,7 +10,7 @@
 
 ## Philosophy
 
-I built this pkg with the primary intention of making the use of Proxy simple and easy. Additionally it also provides the functionality api of other projects like [tinyspy](https://github.com/Aslemammad/tinyspy) [nanospy](https://github.com/ai/nanospy) via the hooks `methodArguments` and `methodReturn`
+I built this pkg with the primary intention of making the use of Proxy simple and easy. Additionally it also provides the functionality api of other projects like [tinyspy](https://github.com/Aslemammad/tinyspy) and [nanospy](https://github.com/ai/nanospy) via the hooks `methodArguments` and `methodReturn`
 
 ## Usage
 
