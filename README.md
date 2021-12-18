@@ -8,6 +8,10 @@
 ![Stars](https://img.shields.io/github/stars/Borrus-sudo/proxy-hooks)
 ![Forks](https://img.shields.io/github/forks/Borrus-sudo/proxy-hooks)
 
+## Philosophy
+
+I built this pkg with the primary intention of making the use of Proxy simple and easy. Additionally it also provides the functionality api of other projects like [tinyspy](https://github.com/Aslemammad/tinyspy) [nanospy](https://github.com/ai/nanospy) via the hooks `methodArguments` and `methodReturn`
+
 ## Usage
 
 ```ts
@@ -74,6 +78,10 @@ type Handler<T extends Object> = Partial<
 ```
 
 Checks its [types.d.ts](https://github.com/Borrus-sudo/proxy-hooks/blob/main/lib/types.d.ts) file for complete API.
+
+## Installation
+
+`npm i proxy-hookified` or `yarn add proxy-hookified`
 
 ## 🎉 Contributing
 
