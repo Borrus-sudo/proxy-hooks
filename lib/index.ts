@@ -15,10 +15,7 @@ export default function <T extends Object>(
           }
           let returnValue = value.apply(target, args);
           if (handler.methodReturn) {
-            const changed = handler.methodReturn(cachedInfo[prop], returnValue);
-            if (typeof changed !== "undefined") {
-              returnValue = changed;
-            }
+            returnValue = handler.methodReturn(cachedInfo[prop], returnValue);
           }
           cachedInfo[prop].calls += 1;
           cachedInfo[prop].results.push(returnValue);
@@ -88,9 +85,8 @@ export default function <T extends Object>(
       }
       //@ts-ignore
       let returnValue = target.apply(thisArg, args);
-      const changed = handler.methodReturn(cachedInfo, returnValue);
-      if (typeof changed !== "undefined") {
-        returnValue = changed;
+      if (handler.methodReturn) {
+        returnValue = handler.methodReturn(cachedInfo, returnValue);
       }
       cachedInfo.calls += 1;
       cachedInfo.results.push(returnValue);
