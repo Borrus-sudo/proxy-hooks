@@ -6,7 +6,9 @@ export default function <T extends Object>(
 ): [T, { proxy: T; revoke: () => void }] {
   if (typeof target !== "function") {
     const cachedInfo: CachedKnowledge = {};
-    Object.entries(target).forEach(([prop, value]) => {
+    Object.entries(
+      Object.assign({}, target, Object.getPrototypeOf(target)),
+    ).forEach(([prop, value]) => {
       cachedInfo[prop] = { propName: prop, calls: 0, results: [] };
       if (typeof value === "function") {
         target[prop] = function (...args: any[]) {
