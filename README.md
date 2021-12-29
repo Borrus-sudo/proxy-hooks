@@ -16,7 +16,7 @@ I built this pkg with the primary intention of making the use of Proxy simple an
 
 ```ts
 import Spy from "proxy-hooks";
-const originalObj = {
+const originalSource = {
   name: "Joe",
   printName(name) {
     return name;
@@ -24,7 +24,7 @@ const originalObj = {
   printObjName() {
     return this.name;
   },
-}; // can also be a function
+}; // originalSource can also be a function
 const handler = {
   canGet() {
     return true;
@@ -34,6 +34,7 @@ const handler = {
   },
   methodArguments(cachedInfo, args) {
     args[0] = args[0] + "Wallace";
+    return args;
   },
   methodReturn(cachedInfo, returnVal) {
     if (cachedInfo.propName === "printObjName") {
@@ -42,7 +43,7 @@ const handler = {
     return returnVal;
   },
 };
-const [proxy, revokeProxy] = Spy(orignalObj, handler);
+const [proxy, revokeProxy] = Spy(orignalSource, handler);
 expect(obj.printName("Jipy")).toBe("JipyWallace");
 expect(obj.printObjName()).toBe("Joe Biden Modified");
 revokeProxy.revoke();
@@ -64,7 +65,7 @@ type Handler<T extends Object> = Partial<
         results: any[];
       },
       args: any[],
-    ) => void;
+    ) => any[];
     methodReturn: (
       cachedKnowledge: {
         propName: string | symbol;
