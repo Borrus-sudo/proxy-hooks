@@ -11,18 +11,38 @@ export default function <T extends Object>(
     ).forEach(([prop, value]) => {
       cachedInfo[prop] = { propName: prop, calls: 0, results: [] };
       if (typeof value === "function") {
-        target[prop] = function (...args: any[]) {
-          if (handler.methodArguments) {
-            handler.methodArguments(cachedInfo[prop], args);
-          }
-          let returnValue = value.apply(target, args);
-          if (handler.methodReturn) {
-            returnValue = handler.methodReturn(cachedInfo[prop], returnValue);
-          }
-          cachedInfo[prop].calls += 1;
-          cachedInfo[prop].results.push(returnValue);
-          return returnValue;
-        };
+        if (value.constructor.name === "AsyncFunction") {
+          target[prop] = async function (...args: any[]) {
+            if (handler.methodArguments) {
+              args = await handler.methodArguments(cachedInfo[prop], args);
+            }
+
+            let returnValue = await value.apply(target, args);
+            if (handler.methodReturn) {
+              returnValue = await handler.methodReturn(
+                cachedInfo[prop],
+                returnValue,
+              );
+            }
+            cachedInfo[prop].calls += 1;
+            cachedInfo[prop].results.push(returnValue);
+            return returnValue;
+          };
+        } else {
+          target[prop] = function (...args: any[]) {
+            if (handler.methodArguments) {
+              handler.methodArguments(cachedInfo[prop], args);
+            }
+
+            let returnValue = value.apply(target, args);
+            if (handler.methodReturn) {
+              returnValue = handler.methodReturn(cachedInfo[prop], returnValue);
+            }
+            cachedInfo[prop].calls += 1;
+            cachedInfo[prop].results.push(returnValue);
+            return returnValue;
+          };
+        }
       }
     });
   }

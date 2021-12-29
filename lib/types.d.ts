@@ -27,7 +27,7 @@ type Handler<T extends Object> = Partial<
         results: any[];
       },
       args: any[],
-    ) => void;
+    ) => any[];
     methodReturn: (
       cachedKnowledge: {
         propName: string | symbol;
