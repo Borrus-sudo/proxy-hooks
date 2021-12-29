@@ -22,6 +22,7 @@ describe("it should pass the tests", () => {
         },
         methodArguments(cachedInfo, args) {
           args[0] = args[0] + "Wallace";
+          return args;
         },
         methodReturn(cachedInfo, returnVal) {
           if (cachedInfo.propName === "printObjName") {
