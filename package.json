@@ -1,8 +1,9 @@
 {
   "name": "proxy-hookified",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "license": "MIT",
   "author": "JSGandalf",
+  "homepage": "https://github.com/Borrus-sudo/proxy-hooks",
   "scripts": {
     "test": "jest",
     "prepare": "husky install",

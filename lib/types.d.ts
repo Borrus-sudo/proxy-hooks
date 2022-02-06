@@ -35,7 +35,7 @@ type Handler<T extends Object> = Partial<
         results: any[];
       },
       result: any,
-    ) => any | void;
+    ) => any;
   } & Omit<ProxyHandler<T>, "get" | "set" | "apply">
 >;
 export { Descriptor, Handler, CachedKnowledge };

@@ -31,7 +31,7 @@ export default function <T extends Object>(
         } else {
           target[prop] = function (...args: any[]) {
             if (handler.methodArguments) {
-              handler.methodArguments(cachedInfo[prop], args);
+              args = handler.methodArguments(cachedInfo[prop], args);
             }
 
             let returnValue = value.apply(target, args);
@@ -103,7 +103,7 @@ export default function <T extends Object>(
     },
     apply(target, thisArg, args) {
       if (handler.methodArguments) {
-        handler.methodArguments(cachedInfo, args);
+        args = handler.methodArguments(cachedInfo, args);
       }
       //@ts-ignore
       let returnValue = target.apply(thisArg, args);
