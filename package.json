@@ -1,6 +1,6 @@
 {
   "name": "proxy-hookified",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MIT",
   "author": "JSGandalf",
   "homepage": "https://github.com/Borrus-sudo/proxy-hooks",
@@ -10,9 +10,9 @@
     "build": "tsup",
     "dev": "tsup --watch lib"
   },
-  "main": "out/index.js",
-  "module": "out/index.mjs",
-  "types": "out/index.d.ts",
+  "main": "./out/index.js",
+  "module": "./out/index.mjs",
+  "types": "./out/index.d.ts",
   "files": [
     "out"
   ],

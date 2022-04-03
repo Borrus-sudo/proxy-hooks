@@ -1,6 +1,7 @@
 import { Options } from "tsup";
 
 const config: Options = {
+  target: "es2020",
   splitting: true,
   format: ["esm", "cjs"],
   entryPoints: ["lib/index.ts"],
