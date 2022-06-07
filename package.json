@@ -5,7 +5,8 @@
   "author": "JSGandalf",
   "homepage": "https://github.com/Borrus-sudo/proxy-hooks",
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "prepare": "husky install",
     "build": "tsup",
     "dev": "tsup --watch lib"
@@ -31,14 +32,13 @@
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@types/jest": "^27.0.3",
     "@types/node": "^16.11.12",
+    "c8": "^7.11.3",
     "husky": "^7.0.0",
-    "jest": "^27.4.3",
     "lint-staged": "^12.1.2",
     "prettier": "^2.5.1",
-    "ts-jest": "^27.1.1",
     "tsup": "^5.10.3",
-    "typescript": "^4.5.3"
+    "typescript": "^4.5.3",
+    "vitest": "^0.14.1"
   }
 }

@@ -1,8 +1,10 @@
+import { describe, it, expect } from "vitest";
 import Spy from "../lib";
+
 describe("it should pass the tests", () => {
   it("should work properly", () => {
     expect(2).toEqual(2);
-    const [obj, revoke] = Spy(
+    const [obj] = Spy(
       {
         name: "Joe",
         printName(name) {
@@ -16,11 +18,11 @@ describe("it should pass the tests", () => {
         canGet() {
           return true;
         },
-        tapGet(target, prop, receiver) {
+        tapGet() {
           //@ts-ignore
           return Reflect.get(...arguments);
         },
-        methodArguments(cachedInfo, args) {
+        methodArguments(_, args) {
           args[0] = args[0] + "Wallace";
           return args;
         },
@@ -34,5 +36,6 @@ describe("it should pass the tests", () => {
     );
     expect(obj.printName("Jipy")).toBe("JipyWallace");
     expect(obj.printObjName()).toBe("Joe Biden Modified");
+    expect(obj.name).toBe("Joe");
   });
 });
