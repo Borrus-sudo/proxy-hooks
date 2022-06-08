@@ -1,4 +1,4 @@
-<!-- DO NOT REMOVE - contributor_list:data:start:["Borrus-sudo"]:end -->
+<!-- DO NOT REMOVE - contributor_list:data:start:["Borrus-sudo", "JacobMGEvans"]:end -->
 
 # ⚓ proxy-hooks
 
@@ -96,6 +96,8 @@ _Please note: All contributions are taken under the MIT license_
 
 
 - **[@Borrus-sudo](https://github.com/Borrus-sudo)**
+
+- **[@JacobMGEvans](https://github.com/JacobMGEvans)**
 
 <!-- DO NOT REMOVE - contributor_list:end -->
 <!-- prettier-ignore-end -->
