@@ -10,12 +10,12 @@ jobs:
   Testing_changes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14.17.0
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.2
         with:
           version: 6.15.1
-      - run: pnpm i
+      - run: pnpm install
       - run: pnpm test
